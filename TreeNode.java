@@ -32,17 +32,6 @@ public class TreeNode {
 		return node;
 	}
 
-	public String getName() {
-		return this.name;
-	}
-
-	public TreeNode getChild() {
-		return this.firstChild;
-	}
-
-	public TreeNode getSibling() {
-		return this.nextSibling;
-	}
 
 	private static TreeNode parseTree(String s) {
 		try {
@@ -89,20 +78,39 @@ public class TreeNode {
 
 	public String rightParentheticRepresentation() {
 		StringBuffer b = new StringBuffer();
-		// TODO!!! create the result in buffer b
+		if(firstChild!=null){
+			b.append("(");
+			b.append(firstChild.rightParentheticRepresentation());
+			b.append(")");
+		}
+		b.append(name);
+		if(nextSibling!=null){
+			b.append(",");
+			b.append(nextSibling.rightParentheticRepresentation());
+		}
 		return b.toString();
 	}
 
 	public static void main(String[] param) {
 		String s = "A(B1,C,D)";
-		TreeNode t = TreeNode.parsePrefix(s);
+		TreeNode t = TreeNode.parsePrefix(s);		
+		String v = t.rightParentheticRepresentation();
+		System.out.println(s + " ==> " + v); // A(B1,C,D) ==> (B1,C,D)A
+		
+		s = "D(A(B,C),U)";
+		t = TreeNode.parsePrefix(s);	
+		v = t.rightParentheticRepresentation();
+		System.out.println(s + " ==> " + v); //D(A(B,C),U) ==> ((B,C)A,U)D
+		
+		s = "A";
+		t = TreeNode.parsePrefix(s);	
+		v = t.rightParentheticRepresentation();
+		System.out.println(s + " ==> " + v); // A ==> A
+		
+		s = "(A,B)";
+		t = TreeNode.parsePrefix(s);	
+		v = t.rightParentheticRepresentation();
+		System.out.println(s + " ==> " + v); // RuntimeException
 
-		if (t.getName().equals("A") && t.getChild().getName().equals("B1") && t.getChild().getSibling().getName().equals("C") && t.getChild().getSibling().getSibling().getName().equals("D")) {
-			System.out.println("Test OK");
-		} else {
-			System.out.println("Test fails");
-		}
-		// String v = t.rightParentheticRepresentation();
-		// System.out.println(s + " ==> " + v); // A(B1,C,D) ==> (B1,C,D)A
 	}
 }
